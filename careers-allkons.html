@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สมัครงาน | All-in-AI — Chat Platform Developer</title>
+<meta name="description" content="ร่วมทีม All-in-AI สร้าง Chat Platform ที่คุยกับคนและ AI ได้ — Frontend (Flutter) & Backend (Node.js + Cassandra)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: #1a1a2e;
+  --bg-card-hover: #1e1e35;
+  --accent-blue: #4f8fff;
+  --accent-cyan: #00d4aa;
+  --accent-purple: #8b5cf6;
+  --accent-orange: #f59e0b;
+  --text-primary: #f0f0f5;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border-color: #2a2a3e;
+  --border-active: #4f8fff;
+  --gradient-1: linear-gradient(135deg, #4f8fff 0%, #8b5cf6 100%);
+  --gradient-2: linear-gradient(135deg, #00d4aa 0%, #4f8fff 100%);
+  --shadow-glow: 0 0 40px rgba(79, 143, 255, 0.15);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'IBM Plex Sans Thai', 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ═══ HERO ═══ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 2rem;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(79, 143, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(0, 212, 170, 0.05) 0%, transparent 50%);
+  animation: drift 20s ease-in-out infinite;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(2%, -1%) rotate(1deg); }
+  66% { transform: translate(-1%, 2%) rotate(-1deg); }
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(79, 143, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 143, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+}
+
+.hero-content {
+  position: relative;
+  text-align: center;
+  max-width: 800px;
+  animation: fadeUp 1s ease-out;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: rgba(79, 143, 255, 0.1);
+  border: 1px solid rgba(79, 143, 255, 0.25);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--accent-blue);
+  margin-bottom: 2rem;
+  letter-spacing: 0.02em;
+}
+
+.badge .dot {
+  width: 8px; height: 8px;
+  background: var(--accent-cyan);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hero h1 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em;
+}
+
+.hero h1 .gradient-text {
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: var(--gradient-1);
+  color: white;
+  box-shadow: 0 4px 20px rgba(79, 143, 255, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(79, 143, 255, 0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1.5px solid var(--border-color);
+}
+
+.btn-outline:hover {
+  border-color: var(--accent-blue);
+  background: rgba(79, 143, 255, 0.05);
+}
+
+/* ═══ SECTIONS ═══ */
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+}
+
+.section h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+
+/* ═══ PROJECT ═══ */
+.project-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gradient-2);
+}
+
+.project-card h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.project-card p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+}
+
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.tech-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  background: rgba(79, 143, 255, 0.08);
+  border: 1px solid rgba(79, 143, 255, 0.15);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: var(--accent-blue);
+}
+
+.tech-tag.green { background: rgba(0, 212, 170, 0.08); border-color: rgba(0, 212, 170, 0.15); color: var(--accent-cyan); }
+.tech-tag.purple { background: rgba(139, 92, 246, 0.08); border-color: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+.tech-tag.orange { background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.15); color: var(--accent-orange); }
+
+/* ═══ POSITIONS ═══ */
+.positions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+.position-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2.5rem;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.position-card:hover {
+  border-color: var(--accent-blue);
+  background: var(--bg-card-hover);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-4px);
+}
+
+.position-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.position-icon.frontend { background: linear-gradient(135deg, rgba(79, 143, 255, 0.15), rgba(0, 212, 170, 0.15)); }
+.position-icon.backend { background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(245, 158, 11, 0.15)); }
+
+.position-card h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.position-card .subtitle {
+  color: var(--accent-cyan);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+}
+
+.position-card ul {
+  list-style: none;
+  margin-bottom: 1.5rem;
+}
+
+.position-card li {
+  color: var(--text-secondary);
+  padding: 0.35rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  font-size: 0.95rem;
+}
+
+.position-card li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-blue);
+  font-weight: 700;
+}
+
+.req-section {
+  margin-top: 1.25rem;
+}
+
+.req-section h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+}
+
+/* ═══ BENEFITS ═══ */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  transition: all 0.3s;
+}
+
+.benefit-item:hover { border-color: rgba(79, 143, 255, 0.3); }
+
+.benefit-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.benefit-item h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.benefit-item p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ═══ FORM ═══ */
+.form-wrapper {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  padding: 6rem 2rem;
+}
+
+.form-container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: var(--shadow-glow);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.form-group label .required {
+  color: #ef4444;
+  margin-left: 0.15rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: var(--bg-primary);
+  border: 1.5px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(79, 143, 255, 0.1);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%236b7280'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.form-group select option {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.file-upload {
+  position: relative;
+  border: 2px dashed var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(79, 143, 255, 0.02);
+}
+
+.file-upload:hover {
+  border-color: var(--accent-blue);
+  background: rgba(79, 143, 255, 0.05);
+}
+
+.file-upload input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-upload .upload-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.file-upload p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.file-upload .file-hint {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.file-name {
+  color: var(--accent-cyan);
+  font-weight: 500;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.form-note {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  margin-top: 1.25rem;
+}
+
+/* ═══ FOOTER ═══ */
+footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+footer a {
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+
+footer a:hover { text-decoration: underline; }
+
+/* ═══ SUCCESS OVERLAY ═══ */
+.success-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 15, 0.92);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.success-overlay.active { display: flex; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.success-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 3rem;
+  text-align: center;
+  max-width: 460px;
+  animation: scaleIn 0.4s ease;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.success-box .check {
+  width: 72px; height: 72px;
+  background: var(--gradient-2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 1.5rem;
+}
+
+.success-box h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.success-box p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 768px) {
+  .section { padding: 4rem 1.5rem; }
+  .project-card { padding: 2rem; }
+  .position-card { padding: 2rem; }
+  .form-card { padding: 2rem; }
+  .form-wrapper { padding: 4rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="badge"><span class="dot"></span> กำลังรับสมัคร 2 ตำแหน่ง</div>
+    <h1>ร่วมสร้าง <span class="gradient-text">Chat Platform</span> ที่เปลี่ยนการสื่อสาร</h1>
+    <p>All-in-AI กำลังมองหาทีม Developer สร้างระบบ Chat Platform สำหรับ Allkons — แพลตฟอร์มที่คุยกับคนจริงและ AI ได้อย่างไร้รอยต่อ</p>
+    <div class="hero-buttons">
+      <a href="#apply" class="btn btn-primary">📝 สมัครเลย</a>
+      <a href="#positions" class="btn btn-outline">ดูตำแหน่งงาน ↓</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROJECT ═══ -->
+<section class="section">
+  <span class="section-label">// เกี่ยวกับโปรเจค</span>
+  <h2>Allkons Chat Platform</h2>
+  <div class="project-card">
+    <h3>🗨️ ระบบ Chat ที่คุยกับคนและ AI ได้ในที่เดียว</h3>
+    <p>
+      สร้าง Chat Platform ให้ <strong>Allkons</strong> ซึ่งเป็นลูกค้าหลักของ All-in-AI
+      — ระบบสื่อสารภายในองค์กรที่ผสาน AI เข้ากับการทำงานจริง ผู้ใช้สามารถ chat กับเพื่อนร่วมงาน
+      หรือสั่งงาน AI agent ได้ในหน้าจอเดียวกัน
+    </p>
+    <p>
+      โปรเจคนี้ต้องการทีมที่พร้อมสร้างระบบตั้งแต่ต้น — ทั้ง Mobile App (Flutter) และ Backend ที่รองรับ
+      real-time messaging ในระดับ enterprise
+    </p>
+    <div class="tech-stack">
+      <span class="tech-tag">Flutter</span>
+      <span class="tech-tag green">Node.js</span>
+      <span class="tech-tag purple">Cassandra</span>
+      <span class="tech-tag orange">AI / LLM</span>
+      <span class="tech-tag">WebSocket</span>
+      <span class="tech-tag green">REST API</span>
+      <span class="tech-tag purple">Firebase</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ POSITIONS ═══ -->
+<section class="section" id="positions">
+  <span class="section-label">// ตำแหน่งที่เปิดรับ</span>
+  <h2>2 ตำแหน่งที่กำลังมองหา</h2>
+  <div class="positions-grid">
+
+    <!-- Frontend -->
+    <div class="position-card">
+      <div class="position-icon frontend">📱</div>
+      <h3>Frontend Developer</h3>
+      <div class="subtitle">Flutter • Mobile App</div>
+
+      <div class="req-section">
+        <h4>สิ่งที่จะทำ</h4>
+        <ul>
+          <li>พัฒนา Mobile App (iOS & Android) ด้วย Flutter</li>
+          <li>สร้าง UI/UX สำหรับระบบ Chat ที่ใช้งานง่ายและสวยงาม</li>
+          <li>พัฒนาระบบ real-time messaging (WebSocket)</li>
+          <li>Integrate กับ AI chat features</li>
+          <li>ทำ Push Notifications และ offline support</li>
+        </ul>
+      </div>
+
+      <div class="req-section">
+        <h4>คุณสมบัติ</h4>
+        <ul>
+          <li>มีประสบการณ์ Flutter อย่างน้อย 1 ปี</li>
+          <li>เข้าใจ state management (Bloc / Riverpod / Provider)</li>
+          <li>เคยทำระบบ chat หรือ real-time app</li>
+          <li>คุ้นเคยกับ REST API & WebSocket</li>
+          <li>มี portfolio หรือ app ที่เคยทำ</li>
+        </ul>
+      </div>
+
+      <div class="req-section">
+        <h4>Nice to Have</h4>
+        <ul>
+          <li>เคยใช้ Firebase (FCM, Firestore)</li>
+          <li>มีประสบการณ์ UI animation / Lottie</li>
+          <li>เข้าใจ CI/CD สำหรับ mobile app</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Backend -->
+    <div class="position-card">
+      <div class="position-icon backend">⚙️</div>
+      <h3>Backend Developer</h3>
+      <div class="subtitle">Node.js • Cassandra</div>
+
+      <div class="req-section">
+        <h4>สิ่งที่จะทำ</h4>
+        <ul>
+          <li>ออกแบบและพัฒนา Backend API สำหรับ Chat Platform</li>
+          <li>สร้างระบบ real-time messaging ที่ scale ได้</li>
+          <li>ออกแบบ database schema บน Apache Cassandra</li>
+          <li>Integrate AI/LLM สำหรับ intelligent chat features</li>
+          <li>จัดการ authentication, authorization, security</li>
+        </ul>
+      </div>
+
+      <div class="req-section">
+        <h4>คุณสมบัติ</h4>
+        <ul>
+          <li>มีประสบการณ์ Node.js (Express / NestJS) อย่างน้อย 1 ปี</li>
+          <li>มีประสบการณ์ NoSQL database (Cassandra / MongoDB / DynamoDB)</li>
+          <li>เข้าใจ WebSocket / Socket.io / real-time systems</li>
+          <li>คุ้นเคยกับ message queue (Redis, RabbitMQ, Kafka)</li>
+          <li>เข้าใจ RESTful API design & security best practices</li>
+        </ul>
+      </div>
+
+      <div class="req-section">
+        <h4>Nice to Have</h4>
+        <ul>
+          <li>มีประสบการณ์กับ Apache Cassandra โดยตรง</li>
+          <li>เคยทำระบบ chat / messaging platform</li>
+          <li>เข้าใจ Docker, Kubernetes, cloud deployment</li>
+          <li>มีความรู้ด้าน AI/ML หรือ LLM integration</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ BENEFITS ═══ -->
+<section class="section">
+  <span class="section-label">// ทำไมต้อง All-in-AI</span>
+  <h2>สิ่งที่คุณจะได้</h2>
+  <div class="benefits-grid">
+    <div class="benefit-item">
+      <div class="benefit-icon">🚀</div>
+      <div>
+        <h4>โปรเจค AI จริง</h4>
+        <p>ทำงานกับ AI technology ล่าสุด ไม่ใช่แค่ CRUD</p>
+      </div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">🏠</div>
+      <div>
+        <h4>Work from Anywhere</h4>
+        <p>ทำงานจากที่ไหนก็ได้ ยืดหยุ่นเรื่องเวลา</p>
+      </div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">📈</div>
+      <div>
+        <h4>เติบโตเร็ว</h4>
+        <p>Startup ขนาดเล็ก ได้เรียนรู้และรับผิดชอบเต็มที่</p>
+      </div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">🤖</div>
+      <div>
+        <h4>AI Tools ให้ใช้</h4>
+        <p>เข้าถึง AI tools ทุกตัวสำหรับทำงานและเรียนรู้</p>
+      </div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">🎯</div>
+      <div>
+        <h4>ลูกค้า Enterprise</h4>
+        <p>ทำโปรเจคจริงให้ลูกค้าองค์กรขนาดใหญ่</p>
+      </div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">💰</div>
+      <div>
+        <h4>เงินเดือนแข่งขัน</h4>
+        <p>ตามประสบการณ์และความสามารถ</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ APPLICATION FORM ═══ -->
+<div class="form-wrapper" id="apply">
+  <div class="form-container">
+    <span class="section-label">// สมัครงาน</span>
+    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1.5rem;">กรอกฟอร์มสมัครงาน</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 2.5rem;">กรอกข้อมูลด้านล่าง เราจะติดต่อกลับภายใน 3 วันทำการ</p>
+
+    <form class="form-card" id="applicationForm" action="https://formsubmit.co/apiasak@gmail.com" method="POST" enctype="multipart/form-data">
+      <!-- FormSubmit config -->
+      <input type="hidden" name="_subject" value="📩 สมัครงาน All-in-AI — Chat Platform Developer">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" id="successRedirect">
+      <input type="text" name="_honey" style="display:none">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>ชื่อ-นามสกุล <span class="required">*</span></label>
+          <input type="text" name="ชื่อ-นามสกุล" placeholder="กรอกชื่อ-นามสกุล" required>
+        </div>
+        <div class="form-group">
+          <label>ชื่อเล่น</label>
+          <input type="text" name="ชื่อเล่น" placeholder="กรอกชื่อเล่น">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>อีเมล <span class="required">*</span></label>
+          <input type="email" name="อีเมล" placeholder="example@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>เบอร์โทร <span class="required">*</span></label>
+          <input type="tel" name="เบอร์โทร" placeholder="08x-xxx-xxxx" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>ตำแหน่งที่สนใจ <span class="required">*</span></label>
+        <select name="ตำแหน่ง" required>
+          <option value="" disabled selected>เลือกตำแหน่ง</option>
+          <option value="Frontend Developer (Flutter)">Frontend Developer (Flutter)</option>
+          <option value="Backend Developer (Node.js + Cassandra)">Backend Developer (Node.js + Cassandra)</option>
+          <option value="ทั้งสองตำแหน่ง">สนใจทั้งสองตำแหน่ง</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>ประสบการณ์ทำงาน <span class="required">*</span></label>
+          <select name="ประสบการณ์" required>
+            <option value="" disabled selected>เลือกประสบการณ์</option>
+            <option value="น้อยกว่า 1 ปี">น้อยกว่า 1 ปี</option>
+            <option value="1-2 ปี">1-2 ปี</option>
+            <option value="2-3 ปี">2-3 ปี</option>
+            <option value="3-5 ปี">3-5 ปี</option>
+            <option value="5+ ปี">5+ ปี</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>เงินเดือนที่คาดหวัง</label>
+          <input type="text" name="เงินเดือนที่คาดหวัง" placeholder="เช่น 35,000 - 50,000">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Portfolio / GitHub / LinkedIn</label>
+        <input type="url" name="Portfolio" placeholder="https://github.com/yourname">
+      </div>
+
+      <div class="form-group">
+        <label>แนะนำตัวเอง & ทำไมสนใจตำแหน่งนี้ <span class="required">*</span></label>
+        <textarea name="แนะนำตัว" placeholder="เล่าเกี่ยวกับตัวเอง ประสบการณ์ที่เกี่ยวข้อง โปรเจคที่ภูมิใจ หรือทำไมอยากร่วมทีม All-in-AI" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>แนบ Resume / CV</label>
+        <div class="file-upload" id="fileUploadZone">
+          <input type="file" name="attachment" accept=".pdf,.doc,.docx,.png,.jpg" id="resumeFile">
+          <div class="upload-icon">📄</div>
+          <p>คลิกหรือลากไฟล์มาวางที่นี่</p>
+          <p class="file-hint">รองรับ PDF, DOC, DOCX, PNG, JPG (ไม่เกิน 5MB)</p>
+          <div class="file-name" id="fileName"></div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-submit" id="submitBtn">
+        🚀 ส่งใบสมัคร
+      </button>
+
+      <p class="form-note">
+        ข้อมูลของคุณจะถูกส่งถึงทีม All-in-AI โดยตรง เราเคารพความเป็นส่วนตัวของคุณ
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- ═══ SUCCESS OVERLAY ═══ -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-box">
+    <div class="check">✓</div>
+    <h3>ส่งใบสมัครเรียบร้อย! 🎉</h3>
+    <p>ขอบคุณที่สนใจร่วมทีม All-in-AI<br>เราจะติดต่อกลับภายใน 3 วันทำการ</p>
+    <a href="#" class="btn btn-primary" onclick="document.getElementById('successOverlay').classList.remove('active'); return false;">ปิด</a>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <p><strong>All-in-AI Co., Ltd.</strong> — Agentic-first AI Solutions</p>
+  <p style="margin-top: 0.5rem;">
+    🌐 <a href="https://all-in-ai.asia" target="_blank">all-in-ai.asia</a> ·
+    ☕ <a href="https://data-espresso.com" target="_blank">data-espresso.com</a> ·
+    📺 <a href="https://youtube.com/@data-espresso" target="_blank">YouTube</a>
+  </p>
+  <p style="margin-top: 1rem;">© 2026 All-in-AI Co., Ltd. All rights reserved.</p>
+</footer>
+
+<script>
+// File upload display
+const fileInput = document.getElementById('resumeFile');
+const fileNameDisplay = document.getElementById('fileName');
+const uploadZone = document.getElementById('fileUploadZone');
+
+fileInput.addEventListener('change', function() {
+  if (this.files.length > 0) {
+    const file = this.files[0];
+    const sizeMB = (file.size / 1024 / 1024).toFixed(1);
+    fileNameDisplay.textContent = `📎 ${file.name} (${sizeMB} MB)`;
+    uploadZone.style.borderColor = 'var(--accent-cyan)';
+  } else {
+    fileNameDisplay.textContent = '';
+    uploadZone.style.borderColor = '';
+  }
+});
+
+// Drag & drop
+uploadZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  uploadZone.style.borderColor = 'var(--accent-blue)';
+  uploadZone.style.background = 'rgba(79, 143, 255, 0.08)';
+});
+
+uploadZone.addEventListener('dragleave', () => {
+  uploadZone.style.borderColor = '';
+  uploadZone.style.background = '';
+});
+
+uploadZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  fileInput.files = e.dataTransfer.files;
+  fileInput.dispatchEvent(new Event('change'));
+});
+
+// Success redirect
+document.getElementById('successRedirect').value = window.location.href + '?success=true';
+
+// Check for success
+if (window.location.search.includes('success=true')) {
+  document.getElementById('successOverlay').classList.add('active');
+  history.replaceState(null, '', window.location.pathname);
+}
+
+// Form submit animation
+document.getElementById('applicationForm').addEventListener('submit', function() {
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = '⏳ กำลังส่ง...';
+  btn.style.opacity = '0.7';
+  btn.disabled = true;
+});
+</script>
+
+</body>
+</html>
