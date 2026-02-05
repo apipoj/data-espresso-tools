@@ -801,7 +801,7 @@ footer a:hover { text-decoration: underline; }
       <input type="hidden" name="_subject" value="📩 สมัครงาน All-in-AI — Developer">
       <input type="hidden" name="_template" value="table">
       <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_next" id="successRedirect">
+      <input type="hidden" name="_next" value="https://apipoj.github.io/data-espresso-tools/careers-thank-you.html">
       <input type="text" name="_honey" style="display:none">
 
       <div class="form-row">
@@ -903,15 +903,6 @@ footer a:hover { text-decoration: underline; }
 </footer>
 
 <script>
-// Success redirect
-document.getElementById('successRedirect').value = window.location.href + '?success=true';
-
-// Check for success
-if (window.location.search.includes('success=true')) {
-  document.getElementById('successOverlay').classList.add('active');
-  history.replaceState(null, '', window.location.pathname);
-}
-
 // Form submit animation
 document.getElementById('applicationForm').addEventListener('submit', function() {
   const btn = document.getElementById('submitBtn');
