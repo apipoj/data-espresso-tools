@@ -972,6 +972,17 @@ document.getElementById('applicationForm').addEventListener('submit', function()
   btn.style.opacity = '0.7';
   btn.disabled = true;
 });
+
+// Auto-resize: tell parent iframe our height
+function notifyParentHeight() {
+  const height = document.documentElement.scrollHeight;
+  window.parent.postMessage({ type: 'iframe-resize', height: height }, '*');
+}
+window.addEventListener('load', notifyParentHeight);
+window.addEventListener('resize', notifyParentHeight);
+new MutationObserver(notifyParentHeight).observe(document.body, { childList: true, subtree: true, attributes: true });
+// Send height periodically for dynamic content
+setInterval(notifyParentHeight, 500);
 </script>
 
 </body>
